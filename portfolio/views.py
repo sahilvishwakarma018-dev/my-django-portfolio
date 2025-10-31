@@ -28,7 +28,12 @@ def home(request):
             )
             
             try:
+                print("q9843702751793251")
                 if contact.attachment:
+                    print("--------------->><<<<")
+                    print(contact.attachment,"----<>>>>>>>")
+                    print(contact.attachment.path,"9000---")
+                    print("0-0-=-00---->>>")
                     email.attach_file(contact.attachment.path)
                 email.send()
             except Exception as e:
