@@ -26,6 +26,8 @@ def home(request):
                 settings.DEFAULT_FROM_EMAIL,
                 [settings.EMAIL_HOST_USER],
             )
+            print(settings.DEFAULT_FROM_EMAIL,"-------ddd")
+            print(settings.EMAIL_HOST_USER,"---uuuu")
             
             try:
                 print("q9843702751793251")
