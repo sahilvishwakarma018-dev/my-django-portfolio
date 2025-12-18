@@ -12,7 +12,7 @@ def home(request):
             
             # Send email
             subject = f'New Portfolio Contact: {contact.name}'
-            message = f"""
+            body = f"""
             New contact form submission:
             
             Name: {contact.name}
@@ -21,27 +21,27 @@ def home(request):
             """
             
             email = EmailMessage(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.EMAIL_HOST_USER],
+                subject=subject,
+                body=body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.DEFAULT_FROM_EMAIL],
             )
             print(settings.DEFAULT_FROM_EMAIL,"-------ddd")
             print(settings.EMAIL_HOST_USER,"---uuuu")
             
+            if contact.attachment:
+                email.attach(
+                    contact.attachment.name,
+                    contact.attachment.read(),
+                    'application/pdf'
+                )
             try:
-                print("q9843702751793251")
-                if contact.attachment:
-                    print("--------------->><<<<")
-                    print(contact.attachment,"----<>>>>>>>")
-                    print(contact.attachment.path,"9000---")
-                    print("0-0-=-00---->>>")
-                    email.attach_file(contact.attachment.path)
-                email.send()
+                email.send(fail_silently=False)
+                messages.success(request, "✅ Message sent successfully!")
             except Exception as e:
-                print("Email sending failed:", e)
-            
-            messages.success(request, 'Thank you! Your message has been sent successfully.')
+                print("❌ Email sending failed:", e)
+                messages.error(request, "❌ Failed to send message.")
+
             return redirect('home')
     else:
         form = ContactForm()
