@@ -398,7 +398,7 @@
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                {% comment %} <li><a href="#projects">Projects</a></li> {% endcomment %}
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
@@ -409,7 +409,7 @@
         <div class="container">
             <div class="hero-content">
                 <h1 class="floating">Hi, I'm Sahil Vishwakarma</h1>
-                <p class="subtitle">Full Stack Developer</p>
+                <p class="subtitle">Backend Engineer</p>
                 <p>I create beautiful, functional websites and applications that solve real-world problems. Let's build something amazing together!</p>
                 <a href="#contact" class="btn">Get In Touch</a>
             </div>
@@ -428,10 +428,14 @@
                     <div class="skills">
                         <div class="skill-card">Python</div>
                         <div class="skill-card">Django</div>
+                        <div class="skill-card">Restful API</div>
+                        <div class="skill-card">SQL/NoSQL</div>
+                        <div class="skill-card">Redis</div>
+                        <div class="skill-card">Celery</div>
+                        <div class="skill-card">Kafka</div>
+                        <div class="skill-card">Elastic Search</div>
                         <div class="skill-card">JavaScript</div>
-                        <div class="skill-card">React</div>
                         <div class="skill-card">HTML/CSS</div>
-                        <div class="skill-card">SQL</div>
                     </div>
                 </div>
                 <div class="about-image floating">
@@ -452,7 +456,7 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="projects">
+    {% comment %} <section id="projects" class="projects">
         <div class="container">
             <h2 class="section-title">My Projects</h2>
             <div class="project-grid">
@@ -482,7 +486,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> {% endcomment %}
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
