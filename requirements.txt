@@ -11,3 +11,4 @@ sendgrid-django
 whitenoise==6.11.0
 django-extensions
 ipython
+sib-api-v3-sdk
