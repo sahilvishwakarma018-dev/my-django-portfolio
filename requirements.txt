@@ -10,3 +10,4 @@ typing_extensions==4.15.0
 sendgrid-django
 whitenoise==6.11.0
 django-extensions
+ipython
