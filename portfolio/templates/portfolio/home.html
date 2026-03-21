@@ -597,6 +597,61 @@
             color: #f87171;
         }
 
+        .response-popup {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(2, 6, 23, 0.85);
+            z-index: 30;
+            padding: 1rem;
+        }
+
+        .response-popup.is-visible {
+            display: flex;
+        }
+
+        .response-popup__card {
+            width: min(440px, 100%);
+            border-radius: 24px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(45, 212, 191, 0.35);
+            padding: 2rem;
+            box-shadow: var(--glow);
+            text-align: center;
+        }
+
+        .response-popup__card--success {
+            border-color: rgba(45, 212, 191, 0.35);
+        }
+
+        .response-popup__card--error {
+            border-color: rgba(248, 113, 113, 0.35);
+        }
+
+        .response-popup__title {
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .response-popup__message {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .response-popup__actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.85rem 1.6rem;
+            font-weight: 600;
+            background: linear-gradient(120deg, #22d3ee, #3b82f6);
+            color: #020617;
+            cursor: pointer;
+        }
+
         footer {
             padding: 2rem 6vw 3rem;
             text-align: center;
@@ -890,15 +945,15 @@
                         <p>Email: <strong>sahil.vishwakarma018@gmail.com</strong></p>
                         <p>LinkedIn: <strong>linkedin.com/in/sahil-vishwakarma</strong></p>
                     </div>
-                    <div class="contact-card">
-                        {% if messages %}
-                            <div class="messages">
-                                {% for message in messages %}
-                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        <form method="POST" enctype="multipart/form-data">
+                <div class="contact-card">
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="id_name">Name</label>
                             <input id="id_name" type="text" name="name" placeholder="Jane Doe" required>
@@ -909,20 +964,76 @@
                             <label for="id_attachment">Attachment (optional)</label>
                             <input id="id_attachment" type="file" name="attachment" accept=".pdf,.doc,.docx,.txt">
                             <button type="submit">Send Message</button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="social-links">
-                <a class="social-link" href="https://linkedin.com/in/sahil-vishwakarma" target="_blank" rel="noreferrer">in</a>
-                <a class="social-link" href="mailto:sahil.vishwakarma018@gmail.com">✉</a>
-                <a class="social-link" href="https://github.com/" target="_blank" rel="noreferrer">GH</a>
             </div>
-            <p>&copy; 2025 Sahil Vishwakarma · Backend Engineer</p>
-        </footer>
-    </div>
+        </section>
+
+        <div id="responsePopup" class="response-popup" role="alertdialog" aria-live="assertive" aria-labelledby="responsePopupTitle" aria-modal="true">
+            <div class="response-popup__card response-popup__card--success" id="responsePopupCard">
+                <div class="response-popup__title" id="responsePopupTitle">Message received</div>
+                <p class="response-popup__message" id="responsePopupMessage">Thank you for reaching out! I will respond as soon as possible.</p>
+                <div class="response-popup__actions">
+                    <button type="button" data-close-popup>Got it</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a class="social-link" href="https://linkedin.com/in/sahil-vishwakarma" target="_blank" rel="noreferrer">in</a>
+            <a class="social-link" href="mailto:sahil.vishwakarma018@gmail.com">✉</a>
+            <a class="social-link" href="https://github.com/" target="_blank" rel="noreferrer">GH</a>
+        </div>
+        <p>&copy; 2025 Sahil Vishwakarma · Backend Engineer</p>
+    </footer>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageEl = document.querySelector('.messages .alert');
+            const popup = document.getElementById('responsePopup');
+            if (!messageEl || !popup) {
+                return;
+            }
+
+            const title = popup.querySelector('#responsePopupTitle');
+            const popupMessage = popup.querySelector('#responsePopupMessage');
+            const card = popup.querySelector('#responsePopupCard');
+            const isSuccess = messageEl.classList.contains('alert-success');
+            const isError = messageEl.classList.contains('alert-error');
+            const state = isError ? 'error' : 'success';
+
+            if (title) {
+                title.textContent = isError ? 'Message not sent' : 'Message received';
+            }
+
+            if (popupMessage) {
+                popupMessage.textContent = messageEl.textContent.trim();
+            }
+
+            card?.classList.remove('response-popup__card--success', 'response-popup__card--error');
+            card?.classList.add(`response-popup__card--${state}`);
+
+            const showPopup = () => popup.classList.add('is-visible');
+            const hidePopup = () => popup.classList.remove('is-visible');
+
+            showPopup();
+
+            popup.addEventListener('click', (event) => {
+                if (event.target === popup) {
+                    hidePopup();
+                }
+            });
+
+            popup.querySelector('[data-close-popup]')?.addEventListener('click', hidePopup);
+
+            document.addEventListener('keyup', (event) => {
+                if (event.key === 'Escape') {
+                    hidePopup();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
